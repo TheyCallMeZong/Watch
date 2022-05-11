@@ -14,7 +14,9 @@
             graphics.DrawLine(new Pen(Color.White, 30f), new Point(175, 175), new Point(l[2], l[3]));
             graphics.DrawLine(new Pen(Color.White, 30f), new Point(175, 175), new Point(l[4], l[5]));
 
-            Form1.degs = new int[3] { watch.SecDeg, watch.MinDeg, watch.HourDeg };
+            Form1.watch.SecDeg = watch.SecDeg;
+            Form1.watch.MinDeg = watch.MinDeg;
+            Form1.watch.HourDeg = watch.HourDeg;
             GetCoordinates.coordinates.Clear();
         }
     }

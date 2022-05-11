@@ -4,15 +4,13 @@ namespace Watch
 {
     public partial class Form1 : Form
     {
-        public static int[] degs;
+        public static Watch watch;
 
         public Form1()
         {
             InitializeComponent();
-            degs = new int[3];
-            degs[0] = DateTime.Now.Second * 6;
-            degs[1] = DateTime.Now.Minute * 6;
-            degs[2] = DateTime.Now.Hour * 30 > 360 ? DateTime.Now.Hour * 30 - 360 : DateTime.Now.Hour * 30;
+            watch = new Watch(DateTime.Now.Second * 6, DateTime.Now.Minute * 6,
+                DateTime.Now.Hour * 30 > 360 ? DateTime.Now.Hour * 30 - 360 : DateTime.Now.Hour * 30);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -32,19 +30,20 @@ namespace Watch
             {
                 int secDeg = Convert.ToInt32(time[2]) * 6;
                 int minDeg = Convert.ToInt32(time[1]) * 6;
-                int houdDeg = Convert.ToInt32(time[0]) * 30 > 360 ? Convert.ToInt32(time[0]) * 30 - 360 : Convert.ToInt32(time[0]) * 30;
+                int houdDeg = Convert.ToInt32(time[0]) * 30 > 360
+                    ? Convert.ToInt32(time[0]) * 30 - 360
+                    : Convert.ToInt32(time[0]) * 30;
 
                 if (minDeg >= 360 || secDeg >= 360)
                 {
                     return;
                 }
 
-                degs[0] = secDeg;
-                degs[1] = minDeg;
-                degs[2] = houdDeg;
+                watch.SecDeg = secDeg;
+                watch.MinDeg = minDeg;
+                watch.HourDeg = houdDeg;
 
                 IMove moveManually = new Adapter.Adapter();
-                Watch watch = new Watch(secDeg, minDeg, houdDeg);
                 watch.Move(moveManually);
             }
         }
@@ -52,15 +51,14 @@ namespace Watch
         private void timer1_Tick(object sender, EventArgs e)
         {
             IMove moveWatch = new MoveWatch();
-            degs[0] += 6;
+            watch.SecDeg += 6;
 
-            if (degs[0] % 360 == 0)
+            if (watch.SecDeg % 360 == 0)
             {
-                degs[0] = 0;
-                degs[1] += 6;
+                watch.SecDeg = 0;
+                watch.MinDeg += 6;
             }
-
-            Watch watch = new Watch(degs[0], degs[1], degs[2]);
+            
             watch.Move(moveWatch);
         }
 
